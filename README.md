@@ -257,6 +257,7 @@ The key design rule: **CLAUDE.md describes the protocol, directives carry the ru
 - **Claude Code** installed and authenticated (`claude` in `$PATH`)
 - **Python 3.12+**
 - An LLM for reflection: Anthropic API key, a running Ollama instance, or any OpenAI-compatible endpoint
+- **macOS or Linux** — the installer is a bash script. Windows users should run under WSL2 (Ubuntu 22.04+ recommended): install Claude Code and Python inside WSL2, then run `install.sh` from the WSL2 terminal
 
 ---
 
@@ -595,6 +596,8 @@ LOOM_SRC_PATH=/path/to/loom-code   # set by installer, don't change manually
 The Critic (directive proposals) is the highest-judgment step — it's worth routing to a stronger model if you want better proposals. The Weaver and Reconsolidator are cheaper to run on a lighter model.
 
 Any model string is accepted: Anthropic model IDs, Ollama model names (`qwen3:8b`), or any OpenAI-compatible model. Each step uses `LOOM_REFLECTION_BASE_URL` and `LOOM_REFLECTION_API_KEY` regardless of which model is set.
+
+**vLLM:** vLLM exposes an OpenAI-compatible API and works out of the box. Point `LOOM_REFLECTION_BASE_URL` at your vLLM server (e.g. `http://localhost:8000`) and set `LOOM_REFLECTION_MODEL` to the model you're serving. Set `LOOM_REFLECTION_API_KEY` to any non-empty string (vLLM doesn't validate it).
 
 ### Customizing identity
 

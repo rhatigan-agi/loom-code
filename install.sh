@@ -86,7 +86,7 @@ else
     echo "  [?] Which LLM provider for reflection?"
     echo "  1) Anthropic API  (claude-haiku-4-5-20251101 — recommended, needs API key)"
     echo "  2) Ollama          (local, needs Ollama running)"
-    echo "  3) OpenAI-compatible endpoint"
+    echo "  3) OpenAI-compatible endpoint  (vLLM, LiteLLM, etc.)"
     echo ""
     read -r -p "  Choice [1]: " PROVIDER_CHOICE
     PROVIDER_CHOICE="${PROVIDER_CHOICE:-1}"

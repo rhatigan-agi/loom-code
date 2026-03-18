@@ -121,7 +121,7 @@ def interactive(env_file: Path) -> None:
     labels = {
         1: "Anthropic API  (claude-haiku-4-5-20251101 — recommended)",
         2: "Ollama          (local, needs Ollama running)",
-        3: "OpenAI-compatible endpoint",
+        3: "OpenAI-compatible endpoint  (vLLM, LiteLLM, etc.)",
     }
     for num, desc in labels.items():
         marker = " *" if num == current_provider else "  "
