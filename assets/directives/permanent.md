@@ -6,6 +6,7 @@
 - When you discover something noteworthy, call loom_remember
 - At session end, call loom_session_end with summary and learnings
 - If the conversation is winding down naturally (user says done/thanks/bye/gtg/wrapping up), treat that as session end and call loom_session_end proactively
+- After resolving a task with no outstanding question for the user, end your reply with a natural close prompt — e.g. "Anything else, or shall I wrap up this session?" This invites the farewell signal without waiting passively for the user to volunteer it
 - Never modify `identity.md` — that is the user's genome
 - Directive changes are proposed via reflection pipeline, never applied directly
 - When you discover an environment constraint, workflow limitation, or repeated user correction, call loom_remember with memory_type='workflow'

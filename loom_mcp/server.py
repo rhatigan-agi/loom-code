@@ -36,6 +36,19 @@ from loom_mcp.models import DirectiveChange, Session
 
 logger = logging.getLogger(__name__)
 
+
+def _coerce_list(val: list[str] | str | None) -> list[str]:
+    """Accept a list or a JSON-encoded string — coerce to list."""
+    if val is None:
+        return []
+    if isinstance(val, str):
+        try:
+            return json.loads(val)
+        except (json.JSONDecodeError, ValueError):
+            return [v.strip() for v in val.strip("[]").split(",") if v.strip()]
+    return val
+
+
 mcp = FastMCP(
     "loom-code",
     instructions="Persistent memory and self-evolving directives for Claude Code",
@@ -181,9 +194,10 @@ def loom_session_start(project: str) -> dict:
 @mcp.tool()
 def loom_session_end(
     summary: str,
-    learnings: list[str] | None = None,
-    surprises: list[str] | None = None,
-    tags: list[str] | None = None,
+    learnings: list[str] | str | None = None,
+    surprises: list[str] | str | None = None,
+    tags: list[str] | str | None = None,
+    project: str | None = None,
 ) -> dict:
     """Close the current session: write notes, store memory, flag if journal is due.
 
@@ -195,10 +209,11 @@ def loom_session_end(
         learnings: Key insights or patterns discovered.
         surprises: Unexpected findings or challenges.
         tags: Tags for categorizing this session.
+        project: Optional project name (ignored if a session is already active).
     """
-    learnings = learnings or []
-    surprises = surprises or []
-    tags = tags or []
+    learnings = _coerce_list(learnings)
+    surprises = _coerce_list(surprises)
+    tags = _coerce_list(tags)
 
     # Find the active session (use the most recent one)
     if not _active_sessions:
@@ -258,6 +273,7 @@ def loom_session_end(
             if journal_due
             else None
         ),
+        "clear_hint": "Session stored. Run /clear to free up context for your next task.",
     }
 
 
@@ -308,7 +324,7 @@ def loom_remember(
     content: str,
     memory_type: str,
     project: str | None = None,
-    tags: list[str] | None = None,
+    tags: list[str] | str | None = None,
     salience: float = 0.5,
 ) -> dict:
     """Store a new memory mid-session.
@@ -326,7 +342,7 @@ def loom_remember(
         content=content,
         memory_type=memory_type,
         project=project,
-        tags=tags or [],
+        tags=_coerce_list(tags),
         salience=salience,
     )
 

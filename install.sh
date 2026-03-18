@@ -590,14 +590,14 @@ if ! $UPDATE_MODE; then
     if [[ "$INSTALL_LSP" =~ ^[Yy]$ ]]; then
         echo ""
         echo "  Installing pyright-lsp..."
-        claude plugin install pyright-lsp@anthropics/claude-code --scope user 2>/dev/null \
+        claude plugin install pyright-lsp@claude-plugins-official --scope user 2>/dev/null \
             && echo "  ✓ pyright-lsp installed" \
-            || echo "  ✗ Install failed. Run manually inside Claude Code: /plugin install pyright-lsp@anthropics/claude-code"
+            || echo "  ✗ Install failed. Run manually: claude plugin install pyright-lsp@claude-plugins-official --scope user"
         echo "  Installing typescript-lsp..."
-        claude plugin install typescript-lsp@anthropics/claude-code --scope user 2>/dev/null \
+        claude plugin install typescript-lsp@claude-plugins-official --scope user 2>/dev/null \
             && echo "  ✓ typescript-lsp installed" \
-            || echo "  ✗ Install failed. Run manually inside Claude Code: /plugin install typescript-lsp@anthropics/claude-code"
+            || echo "  ✗ Install failed. Run manually: claude plugin install typescript-lsp@claude-plugins-official --scope user"
     else
-        echo "  Skipped. Install later: claude plugin install pyright-lsp@anthropics/claude-code --scope user"
+        echo "  Skipped. Install later: claude plugin install pyright-lsp@claude-plugins-official --scope user"
     fi
 fi
