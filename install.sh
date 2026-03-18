@@ -449,10 +449,13 @@ PYEOF
 GLOBAL_CLAUDE_MD="$HOME/.claude/CLAUDE.md"
 SNIPPET="$LOOM_SRC/assets/claude-md-snippet.md"
 
-if [ -f "$GLOBAL_CLAUDE_MD" ]; then
-    if grep -q "## Loom-Code Memory System" "$GLOBAL_CLAUDE_MD" 2>/dev/null; then
-        # Replace existing loom-code section
-        python3 - "$GLOBAL_CLAUDE_MD" "$SNIPPET" <<'PYEOF'
+if [ ! -f "$GLOBAL_CLAUDE_MD" ]; then
+    # Create fresh
+    cp "$SNIPPET" "$GLOBAL_CLAUDE_MD"
+    echo "  Created $GLOBAL_CLAUDE_MD with loom-code section"
+elif grep -q "## Loom-Code Memory System" "$GLOBAL_CLAUDE_MD" 2>/dev/null; then
+    # Replace existing loom-code section
+    python3 - "$GLOBAL_CLAUDE_MD" "$SNIPPET" <<'PYEOF'
 import sys
 from pathlib import Path
 claude_md = Path(sys.argv[1])
@@ -462,17 +465,12 @@ idx = content.find("## Loom-Code Memory System")
 base = content[:idx].rstrip('\n') + '\n\n'
 claude_md.write_text(base + snippet)
 PYEOF
-        echo "  Updated loom-code section in $GLOBAL_CLAUDE_MD"
-    else
-        # Append for the first time
-        printf '\n' >> "$GLOBAL_CLAUDE_MD"
-        cat "$SNIPPET" >> "$GLOBAL_CLAUDE_MD"
-        echo "  Appended loom-code section to $GLOBAL_CLAUDE_MD"
-    fi
+    echo "  Updated loom-code section in $GLOBAL_CLAUDE_MD"
 else
-    echo "  $GLOBAL_CLAUDE_MD not found — create it and re-run, or add snippet manually."
-    echo ""
-    cat "$SNIPPET"
+    # Append for the first time
+    printf '\n' >> "$GLOBAL_CLAUDE_MD"
+    cat "$SNIPPET" >> "$GLOBAL_CLAUDE_MD"
+    echo "  Appended loom-code section to $GLOBAL_CLAUDE_MD"
 fi
 
 # ── Done ──────────────────────────────────────────────────────────────────────
