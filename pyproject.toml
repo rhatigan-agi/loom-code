@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "loom-code"
+version = "0.1.0"
+description = "Persistent memory and self-evolving directives for Claude Code"
+requires-python = ">=3.12"
+dependencies = [
+    "sentence-transformers>=3.0.0,<4.0.0",
+    "numpy>=1.26.0,<3.0.0",
+    "openai>=1.0.0,<2.0.0",
+    "fastmcp>=2.0.0,<3.0.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["loom_mcp*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

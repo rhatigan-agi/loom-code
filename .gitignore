@@ -1,0 +1,20 @@
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+.mypy_cache/
+dist/
+build/
+
+# Runtime data — never commit personal memory, keys, or models
+.env
+*.db
+*.sqlite
+.venv/
+.model-cache/
+.active_sessions/
+
+# Claude Code local settings (may contain personal paths)
+.claude/settings.local.json
