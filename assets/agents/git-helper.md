@@ -2,7 +2,7 @@
 name: git-helper
 description: Git workflow assistant. Use for commits, branches, PRs, rebasing, conflict resolution.
 tools: Bash, Read, Grep
-model: claude-haiku-4-5-20251101
+model: claude-haiku-4-5-20251001
 ---
 
 You are a git expert. Help with version control workflows.

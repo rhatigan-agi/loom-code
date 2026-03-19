@@ -303,7 +303,7 @@ source ~/.bashrc   # or ~/.zshrc
 
 | Choice | Provider | Notes |
 |--------|----------|-------|
-| 1 | Anthropic API | `claude-haiku-4-5-20251101` — recommended, fast, cheap |
+| 1 | Anthropic API | `claude-haiku-4-5-20251001` — recommended, fast, cheap |
 | 2 | Ollama | Local, no key needed, `qwen3:8b` default |
 | 3 | OpenAI-compatible | Any endpoint + key + model name |
 
@@ -582,15 +582,15 @@ All config lives in `~/.loom-code/.env`. Set during install, editable via `loom-
 
 ```bash
 LOOM_USER_NAME=Jeff
-LOOM_REFLECTION_MODEL=claude-haiku-4-5-20251101   # default model for all reflect steps
+LOOM_REFLECTION_MODEL=claude-haiku-4-5-20251001   # default model for all reflect steps
 LOOM_REFLECTION_BASE_URL=https://api.anthropic.com
 LOOM_REFLECTION_API_KEY=sk-ant-...
 LOOM_SRC_PATH=/path/to/loom-code   # set by installer, don't change manually
 
 # Optional: per-step model overrides (all default to LOOM_REFLECTION_MODEL)
 # LOOM_CRITIC_MODEL=claude-sonnet-4-5-20251101     # The Critic (directive proposals)
-# LOOM_WEAVER_MODEL=claude-haiku-4-5-20251101      # The Memory Weaver (journal synthesis)
-# LOOM_RECONSOLIDATION_MODEL=claude-haiku-4-5-20251101  # Reconsolidator (cross-project insights)
+# LOOM_WEAVER_MODEL=claude-haiku-4-5-20251001      # The Memory Weaver (journal synthesis)
+# LOOM_RECONSOLIDATION_MODEL=claude-haiku-4-5-20251001  # Reconsolidator (cross-project insights)
 ```
 
 The Critic (directive proposals) is the highest-judgment step — it's worth routing to a stronger model if you want better proposals. The Weaver and Reconsolidator are cheaper to run on a lighter model.

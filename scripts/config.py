@@ -119,7 +119,7 @@ def interactive(env_file: Path) -> None:
     print()
     print("  Which LLM provider for reflection?")
     labels = {
-        1: "Anthropic API  (claude-haiku-4-5-20251101 — recommended)",
+        1: "Anthropic API  (claude-haiku-4-5-20251001 — recommended)",
         2: "Ollama          (local, needs Ollama running)",
         3: "OpenAI-compatible endpoint  (vLLM, LiteLLM, etc.)",
     }
@@ -144,11 +144,11 @@ def interactive(env_file: Path) -> None:
             api_key = _prompt("Anthropic API key", current_key, secret=True)
             model = _prompt(
                 "Model",
-                data.get("LOOM_REFLECTION_MODEL", "claude-haiku-4-5-20251101"),
+                data.get("LOOM_REFLECTION_MODEL", "claude-haiku-4-5-20251001"),
             )
             data["LOOM_REFLECTION_API_KEY"] = api_key or current_key
             data["LOOM_REFLECTION_BASE_URL"] = "https://api.anthropic.com"
-            data["LOOM_REFLECTION_MODEL"] = model or "claude-haiku-4-5-20251101"
+            data["LOOM_REFLECTION_MODEL"] = model or "claude-haiku-4-5-20251001"
 
         elif choice == 2:
             base_url = _prompt(

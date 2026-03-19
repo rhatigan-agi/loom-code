@@ -84,7 +84,7 @@ else
     LOOM_USER_NAME="${LOOM_USER_NAME:-Human}"
     echo ""
     echo "  [?] Which LLM provider for reflection?"
-    echo "  1) Anthropic API  (claude-haiku-4-5-20251101 — recommended, needs API key)"
+    echo "  1) Anthropic API  (claude-haiku-4-5-20251001 — recommended, needs API key)"
     echo "  2) Ollama          (local, needs Ollama running)"
     echo "  3) OpenAI-compatible endpoint  (vLLM, LiteLLM, etc.)"
     echo ""
@@ -95,7 +95,7 @@ else
         1)
             read -r -p "  Anthropic API key: " LOOM_REFLECTION_API_KEY
             LOOM_REFLECTION_BASE_URL="https://api.anthropic.com"
-            LOOM_REFLECTION_MODEL="claude-haiku-4-5-20251101"
+            LOOM_REFLECTION_MODEL="claude-haiku-4-5-20251001"
             ;;
         2)
             read -r -p "  Ollama base URL [http://localhost:11434]: " LOOM_REFLECTION_BASE_URL
@@ -118,7 +118,7 @@ else
             echo "  Invalid choice, defaulting to Anthropic."
             read -r -p "  Anthropic API key: " LOOM_REFLECTION_API_KEY
             LOOM_REFLECTION_BASE_URL="https://api.anthropic.com"
-            LOOM_REFLECTION_MODEL="claude-haiku-4-5-20251101"
+            LOOM_REFLECTION_MODEL="claude-haiku-4-5-20251001"
             ;;
     esac
 

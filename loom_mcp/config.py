@@ -73,7 +73,7 @@ RECONSOLIDATION_IMMUNITY_DAYS: int = 30
 # Reflection defaults
 DEFAULT_REFLECT_DAYS: int = 7
 REFLECTION_MODEL: str = os.environ.get(
-    "LOOM_REFLECTION_MODEL", "claude-haiku-4-5-20251101"
+    "LOOM_REFLECTION_MODEL", "claude-haiku-4-5-20251001"
 )
 # Base URL for reflection API.
 # Defaults to Anthropic API. Override with LOOM_REFLECTION_BASE_URL for Ollama or any
