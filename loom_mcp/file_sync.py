@@ -100,8 +100,15 @@ def read_identity() -> str:
     return cfg.IDENTITY_FILE.read_text(encoding="utf-8")
 
 
+def read_system_directives() -> str:
+    """Read the system directives file (managed by loom-code, always overwritten on install)."""
+    if not cfg.SYSTEM_DIRECTIVES_FILE.exists():
+        return ""
+    return cfg.SYSTEM_DIRECTIVES_FILE.read_text(encoding="utf-8")
+
+
 def read_permanent_directives() -> str:
-    """Read the permanent directives file."""
+    """Read the user permanent directives file (user-owned, never overwritten by install)."""
     if not cfg.PERMANENT_DIRECTIVES_FILE.exists():
         return ""
     return cfg.PERMANENT_DIRECTIVES_FILE.read_text(encoding="utf-8")
@@ -124,8 +131,11 @@ def read_project_directives(project: str) -> str:
 
 
 def get_all_directive_files() -> list[Path]:
-    """List all directive files."""
+    """List all directive files in load order: system, permanent, domain, project."""
     files: list[Path] = []
+    if cfg.SYSTEM_DIRECTIVES_FILE.exists():
+        files.append(cfg.SYSTEM_DIRECTIVES_FILE)
+
     if cfg.PERMANENT_DIRECTIVES_FILE.exists():
         files.append(cfg.PERMANENT_DIRECTIVES_FILE)
 
@@ -366,9 +376,16 @@ def find_similar_directive(
 
     filepath = cfg.DIRECTIVES_DIR / directive_file
     if not filepath.exists():
-        return None
+        # For permanent.md, still check system.md even if permanent.md is absent
+        if directive_file != "permanent.md":
+            return None
 
-    content = filepath.read_text(encoding="utf-8")
+    content = filepath.read_text(encoding="utf-8") if filepath.exists() else ""
+
+    # When targeting permanent.md, also check system.md — avoids duplicating system rules
+    if directive_file == "permanent.md" and cfg.SYSTEM_DIRECTIVES_FILE.exists():
+        system_content = cfg.SYSTEM_DIRECTIVES_FILE.read_text(encoding="utf-8")
+        content = system_content + "\n" + content
     rules = [
         line.strip()
         for line in content.splitlines()

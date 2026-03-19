@@ -38,6 +38,7 @@ MODEL_CACHE_DIR: Path = LOOM_HOME / ".model-cache"
 
 # File paths
 IDENTITY_FILE: Path = LOOM_HOME / "identity.md"
+SYSTEM_DIRECTIVES_FILE: Path = DIRECTIVES_DIR / "system.md"
 PERMANENT_DIRECTIVES_FILE: Path = DIRECTIVES_DIR / "permanent.md"
 DB_PATH: Path = DB_DIR / "loom.db"
 ACTIVE_SESSIONS_DIR: Path = LOOM_HOME / ".active_sessions"

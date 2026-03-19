@@ -6,7 +6,7 @@
 
 LOOM_HOME="${LOOM_HOME:-$HOME/.loom-code}"
 ACTIVE_DIR="$LOOM_HOME/.active_sessions"
-THRESHOLD_MIN=45
+THRESHOLD_MIN=15
 
 [ -d "$ACTIVE_DIR" ] || exit 0
 
@@ -27,7 +27,7 @@ for sentinel in "$ACTIVE_DIR"/*; do
 
     if [ "$AGE_MIN" -ge "$THRESHOLD_MIN" ]; then
         PROJECT=$(basename "$sentinel")
-        echo "loom-code: session '${PROJECT}' has been open for ${AGE_MIN}m. If this conversation is wrapping up, call loom_session_end() to save notes and learnings."
+        echo "loom-code: session '${PROJECT}' has been open for ${AGE_MIN}m. If work is complete or the conversation is winding down, call loom_session_end() now — do not wait for the user to say goodbye. Do NOT use loom_remember() as a substitute; it does not write a session record. Users may also run /wrap to trigger this explicitly."
         REMINDED=true
     fi
 done

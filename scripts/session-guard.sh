@@ -14,6 +14,8 @@
 # Each project gets its own sentinel: ~/.loom-code/.active_sessions/<project>
 
 SENTINEL_DIR="${LOOM_HOME:-$HOME/.loom-code}/.active_sessions"
+# Sentinels older than this are treated as orphaned (previous session never closed).
+STALE_HOURS=2
 
 # Parse cwd from the JSON payload on stdin; derive project = basename(cwd).
 # If parsing fails for any reason, fall through to the reminder (safe side).
@@ -27,13 +29,44 @@ except Exception:
 
 PROJECT=$(basename "${CWD:-}")
 
-if [ -z "$PROJECT" ] || [ ! -f "$SENTINEL_DIR/$PROJECT" ]; then
+SENTINEL="$SENTINEL_DIR/$PROJECT"
+
+# Determine session state:
+#   no_sentinel  → no session was ever started (or was cleanly closed)
+#   fresh        → sentinel is recent; session may be active in current conversation
+#   stale        → sentinel is old; previous session was orphaned (never closed)
+SESSION_STATE="no_sentinel"
+if [ -f "$SENTINEL" ]; then
+    NOW=$(date +%s)
+    if [[ "$(uname)" == "Darwin" ]]; then
+        MTIME=$(stat -f "%m" "$SENTINEL" 2>/dev/null || echo "$NOW")
+    else
+        MTIME=$(stat -c "%Y" "$SENTINEL" 2>/dev/null || echo "$NOW")
+    fi
+    AGE_HOURS=$(( (NOW - MTIME) / 3600 ))
+    if [ "$AGE_HOURS" -ge "$STALE_HOURS" ]; then
+        SESSION_STATE="stale"
+    else
+        SESSION_STATE="fresh"
+    fi
+fi
+
+if [ "$SESSION_STATE" = "no_sentinel" ]; then
     if [ -n "$PROJECT" ]; then
         printf '[loom-code] No active session for project "%s". Call loom_session_start("%s") as your very first action — before reading files, before responding, before anything else.' "$PROJECT" "$PROJECT"
     else
         printf '[loom-code] No active session detected. Call loom_session_start("<project>") as your very first action — before reading files, before responding, before anything else.'
     fi
+elif [ "$SESSION_STATE" = "stale" ]; then
+    # Orphaned sentinel — previous session never called loom_session_end.
+    # Prompt for a fresh session_start so the new conversation is properly tracked.
+    if [ -n "$PROJECT" ]; then
+        printf '[loom-code] Previous session for "%s" was not properly closed (orphaned). Call loom_session_start("%s") as your very first action to begin a new tracked session.' "$PROJECT" "$PROJECT"
+    else
+        printf '[loom-code] Orphaned session detected (previous session was not closed). Call loom_session_start("<project>") as your very first action.'
+    fi
 fi
+# SESSION_STATE="fresh" → do nothing; session is active in this conversation.
 
 # ── Loom work surface ──────────────────────────────────────────────────────────
 # Check for active or incomplete /loom work folders in this project directory.

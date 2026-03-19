@@ -15,6 +15,7 @@ from loom_mcp.file_sync import (
     read_identity,
     read_permanent_directives,
     read_project_directives,
+    read_system_directives,
     write_session_file,
 )
 from loom_mcp.memory import (
@@ -96,8 +97,10 @@ def loom_session_start(project: str) -> dict:
     # Load identity
     identity = read_identity()
 
-    # Load directives
-    permanent = read_permanent_directives()
+    # Load directives — system (always overwritten on install) + permanent (user-owned)
+    _system = read_system_directives()
+    _user = read_permanent_directives()
+    permanent = "\n".join(part for part in [_system, _user] if part)
     project_directives = read_project_directives(project)
 
     # Load domain directives based on known domains
@@ -419,7 +422,9 @@ def loom_directives(
     """
     result: dict[str, str] = {}
 
-    permanent = read_permanent_directives()
+    _system = read_system_directives()
+    _user = read_permanent_directives()
+    permanent = "\n".join(part for part in [_system, _user] if part)
     if permanent:
         result["permanent"] = permanent
 

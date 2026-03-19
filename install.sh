@@ -173,13 +173,19 @@ else
     echo "  identity.md already exists, skipping."
 fi
 
-# ── 8. Seed directives/permanent.md from assets ───────────────────────────────
-echo "[8/12] Seeding directives..."
+# ── 8. Install directives ──────────────────────────────────────────────────────
+echo "[8/12] Installing directives..."
+
+# system.md — always overwritten (loom-managed, safe to update on every install)
+cp "$LOOM_SRC/assets/directives/system.md" "$LOOM_HOME/directives/system.md"
+echo "  Updated system.md (always refreshed from source)."
+
+# permanent.md — seed-once (user-owned, accumulates Critic rules over time)
 if [ ! -f "$LOOM_HOME/directives/permanent.md" ]; then
     cp "$LOOM_SRC/assets/directives/permanent.md" "$LOOM_HOME/directives/permanent.md"
-    echo "  Created directives/permanent.md from assets."
+    echo "  Created permanent.md (user directives stub)."
 else
-    echo "  directives/permanent.md already exists, skipping."
+    echo "  permanent.md already exists, skipping (user-owned)."
 fi
 
 # ── 9. Register MCP server at user scope ──────────────────────────────────────
